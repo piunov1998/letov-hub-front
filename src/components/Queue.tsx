@@ -5,7 +5,7 @@ import "../css/Queue.css"
 
 function getQueue(setter: React.Dispatch<React.SetStateAction<queueItemProps[]>>) {
     const url = `${process.env.REACT_APP_HOST}/api/queue`
-        axios.get<queueItemProps[]>(url).then((response) => {
+        axios.get<queueItemProps[]>(url, {withCredentials: true}).then((response) => {
             setter(response.data)
     })
 }

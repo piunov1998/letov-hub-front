@@ -6,7 +6,7 @@ import "../css/SongList.css"
 function getSongs(setter: React.Dispatch<React.SetStateAction<songProps[]>>): songProps[] {
     let songs: songProps[] = []
     const url = `${process.env.REACT_APP_HOST}/api/songs`
-    axios.get<songProps[]>(url).then((response) => {
+    axios.get<songProps[]>(url, {withCredentials: true}).then((response) => {
         setter(response.data)
     })
     return songs
