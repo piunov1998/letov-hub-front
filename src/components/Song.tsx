@@ -15,6 +15,9 @@ type songState = {
 }
 
 class Song extends React.Component<songProps, songState> {
+
+    initName = ""
+
     constructor(props: songProps) {
         super(props)
         this.state = {
@@ -22,6 +25,8 @@ class Song extends React.Component<songProps, songState> {
             renamed: false,
             expanded: false,
         }
+        this.initName = props.name
+
         this.onChange = this.onChange.bind(this)
         this.onKeyPressed = this.onKeyPressed.bind(this)
     }
@@ -33,8 +38,12 @@ class Song extends React.Component<songProps, songState> {
 
     onChange(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({name: event.currentTarget.value})
-        if (!this.state.renamed) {this.setState({renamed: true})}
-        if (!this.state.expanded) {this.setState({expanded: true})}
+
+        if (event.currentTarget.value === this.initName) {
+            this.setState({renamed: false, expanded: false})
+        } else {
+            this.setState({renamed: true, expanded: true})
+        }
     }
 
     Rename(newName: string) {
@@ -44,7 +53,10 @@ class Song extends React.Component<songProps, songState> {
                 alert("Error during rename")
             }
             this.setState({renamed: false})
-            setTimeout(() => {this.setState({expanded: false})}, 1000)
+            this.initName = newName
+            setTimeout(() => {
+                this.setState({expanded: false})
+            }, 1000)
         })
     }
 
