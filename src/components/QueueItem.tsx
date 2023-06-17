@@ -1,5 +1,6 @@
 import "../css/QueueItem.css"
 import {songProps} from "./Song";
+import React from "react";
 
 export type queueItemProps = {
     id: number;
@@ -7,12 +8,15 @@ export type queueItemProps = {
     user: string;
 }
 
-function QueueItem(props: queueItemProps) {
-    return <div className="item">
-        <label className="item-number">{props.id}</label>
-        <label className="item-name">{props.song.name}</label>
-        <label className="item-user">{props.user}</label>
-    </div>
+class QueueItem extends React.Component<queueItemProps, any> {
+    render() {
+
+        return <div className="item">
+            <label className="item-number">{this.props.id}</label>
+            <label className="item-name">{this.props.song.name}</label>
+            <label className="item-user">{this.props.user}</label>
+        </div>
+    }
 }
 
 export default QueueItem
