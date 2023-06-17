@@ -51,6 +51,7 @@ class Song extends React.Component<songProps, songState> {
         axios.post(url, {"name": newName}, {withCredentials: true}).then((response) => {
             if (response.status !== 204) {
                 alert("Error during rename")
+                return
             }
             this.setState({renamed: false})
             this.initName = newName
