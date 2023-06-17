@@ -1,0 +1,37 @@
+.song {
+    box-shadow: 0 0 20px -7px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    min-height: 4em;
+}
+
+.song * {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Raleway', sans-serif;
+}
+
+.song-number {
+    flex: 1 auto 50px;
+    text-align: center;
+    border-right: rgba(0,0,0,20%) 2px solid;
+}
+
+.song-name {
+    flex: 20 auto 300px;
+    border: none;
+}
+
+.song-name:hover {
+    border: gray 1px solid;
+    border-radius: 5px;
+}
+
+.song-source {
+    flex: 2 auto 150px;
+    text-align: center;
+    border-left: rgba(0,0,0,20%) 2px solid;
+}

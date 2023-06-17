@@ -1,0 +1,26 @@
+.header {
+    background-color: #2d2d2d;
+    font-size: 30px;
+    display: flex;
+    height: 2em;
+}
+
+.header button {
+    font-size: 40px;
+    background: none;
+    border: none;
+    transition-duration: 0.2s;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: aliceblue;
+}
+
+.header button:hover {
+    background: #363636;
+    cursor: pointer;
+    font-size: 43px;
+}
+
+.active-tab {
+    text-decoration: underline;
+}

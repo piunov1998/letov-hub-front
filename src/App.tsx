@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {JSX, useState} from 'react'
+import SongList from "./components/SongList"
+import Header from "./components/Header";
+import Queue from "./components/Queue";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+type Tab = "songs" | "queue"
+
+
+function SelectComponent(tab: Tab): JSX.Element {
+    switch (tab) {
+        default:
+            return <div/>
+        case "songs":
+            return <SongList/>
+        case "queue":
+            return <Queue/>
+    }
 }
 
-export default App;
+
+function App() {
+    const [tab, setTab] = useState<Tab>("queue")
+
+    return (
+        <div className="App">
+            <Header
+                onQueueTab={() => {setTab("queue")}}
+                onSongTab={() => {setTab("songs")}}
+            />
+            {SelectComponent(tab)}
+        </div>
+    )
+}
+
+export default App
