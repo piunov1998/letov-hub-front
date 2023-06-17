@@ -1,6 +1,6 @@
 .song-list {
     padding: 10px;
     display: flex;
-    gap: 7px;
+    gap: 13px;
     flex-direction: column;
 }

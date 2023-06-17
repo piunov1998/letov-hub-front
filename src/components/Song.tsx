@@ -11,6 +11,7 @@ export type songProps = {
 type songState = {
     name: string
     renamed: boolean
+    expanded: boolean
 }
 
 class Song extends React.Component<songProps, songState> {
@@ -18,7 +19,8 @@ class Song extends React.Component<songProps, songState> {
         super(props)
         this.state = {
             name: props.name,
-            renamed: false
+            renamed: false,
+            expanded: false,
         }
         this.onChange = this.onChange.bind(this)
         this.onKeyPressed = this.onKeyPressed.bind(this)
@@ -30,7 +32,9 @@ class Song extends React.Component<songProps, songState> {
     }
 
     onChange(event: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({name: event.currentTarget.value, renamed: true})
+        this.setState({name: event.currentTarget.value})
+        if (!this.state.renamed) {this.setState({renamed: true})}
+        if (!this.state.expanded) {this.setState({expanded: true})}
     }
 
     Rename(newName: string) {
@@ -39,18 +43,25 @@ class Song extends React.Component<songProps, songState> {
             if (response.status !== 204) {
                 alert("Error during rename")
             }
+            this.setState({renamed: false})
+            setTimeout(() => {this.setState({expanded: false})}, 1000)
         })
     }
 
     render() {
-        return <div className="song">
+        return <div className={"song" + (this.state.expanded ? " song-expanded" : "")}>
             <label className="song-number">{this.props.id}</label>
-            <input
-                className="song-name"
-                defaultValue={this.state.name}
-                onChange={this.onChange}
-                onKeyPress={this.onKeyPressed}
-            ></input>
+            <div className="song-name">
+                <input
+                    defaultValue={this.state.name}
+                    onChange={this.onChange}
+                    onKeyPress={this.onKeyPressed}
+                />
+                <label
+                    className={"song-status" + (this.state.renamed ? " song-status-not-saved" : " song-status-saved")}
+                    hidden={!this.state.expanded}
+                >{this.state.renamed ? "press Enter to save changes" : "Saved!"}</label>
+            </div>
             <a className="song-source" href={this.props.source}>YT link</a>
         </div>
     }

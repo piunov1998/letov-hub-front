@@ -5,6 +5,7 @@
     display: flex;
     align-items: center;
     min-height: 4em;
+    transition-duration: 0.3s;
 }
 
 .song * {
@@ -12,20 +13,46 @@
     font-size: 20px;
     font-weight: bold;
     font-family: 'Raleway', sans-serif;
+    box-sizing: content-box;
+    transition-duration: 0.3s;
+}
+
+.song-expanded {
+    height: 5em;
+}
+
+.song-status {
+    flex: 1;
+    font-size: 12px;
+    padding: 0;
+}
+
+.song-status-not-saved {
+    color: #b23821;
+}
+
+.song-status-saved {
+    color: #51b221;
 }
 
 .song-number {
     flex: 1 auto 50px;
     text-align: center;
-    border-right: rgba(0,0,0,20%) 2px solid;
+    border-right: rgba(0, 0, 0, 20%) 2px solid;
 }
 
 .song-name {
     flex: 20 auto 300px;
-    border: none;
+    display: flex;
+    flex-direction: column;
 }
 
-.song-name:hover {
+.song-name input {
+    border: rgba(0, 0, 0, 0%) 1px solid;
+    flex: 3;
+}
+
+.song-name:hover input {
     border: gray 1px solid;
     border-radius: 5px;
 }
@@ -33,5 +60,5 @@
 .song-source {
     flex: 2 auto 150px;
     text-align: center;
-    border-left: rgba(0,0,0,20%) 2px solid;
+    border-left: rgba(0, 0, 0, 20%) 2px solid;
 }
