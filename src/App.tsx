@@ -19,7 +19,11 @@ function SelectComponent(tab: Tab): JSX.Element {
 
 
 function App() {
-    const [tab, setTab] = useState<Tab>("queue")
+    let startValue = process.env.REACT_APP_DEFAULT_TAB as Tab
+    if (startValue === undefined) {
+        startValue = "songs"
+    }
+    const [tab, setTab] = useState<Tab>(startValue)
 
     return (
         <div className="App">

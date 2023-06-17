@@ -12,7 +12,11 @@ type Tab = "songs" | "queue"
 
 
 function Header(props: headerProps) {
-    const [activeTab, setActiveTab] = useState<Tab>("queue")
+    let startValue = process.env.REACT_APP_DEFAULT_TAB as Tab
+    if (startValue === undefined) {
+        startValue = "songs"
+    }
+    const [activeTab, setActiveTab] = useState<Tab>(startValue)
 
     return (
         <header className="header">
