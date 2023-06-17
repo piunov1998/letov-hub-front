@@ -1,7 +1,7 @@
 import "../css/Header.css"
 // @ts-ignore
 import logo from "../img/logo.png"
-import React, {useState} from "react";
+import React from "react";
 
 type headerProps = {
     onSongTab(): void
@@ -10,27 +10,33 @@ type headerProps = {
 
 type Tab = "songs" | "queue"
 
+type headerState = {
+    activeTab: Tab
+}
 
-function Header(props: headerProps) {
-    let startValue = process.env.REACT_APP_DEFAULT_TAB as Tab
-    if (startValue === undefined) {
-        startValue = "songs"
+class Header extends React.Component<headerProps, headerState> {
+    constructor(props: headerProps) {
+        super(props)
+        this.state = {
+            activeTab: process.env.REACT_APP_DEFAULT_TAB as Tab
+        }
     }
-    const [activeTab, setActiveTab] = useState<Tab>(startValue)
 
-    return (
-        <header className="header">
-            <img src={logo} alt="Letov the punk"/>
-            <button
-                className={activeTab==="songs" ? "active-tab":""}
-                onClick={() => {setActiveTab("songs"); props.onSongTab()}}
-            >Songs</button>
-            <button
-                className={activeTab==="queue" ? "active-tab":""}
-                onClick={() => {setActiveTab("queue"); props.onQueueTab()}}
-            >Queue</button>
-        </header>
-    )
+    render() {
+        return (
+            <header className="header">
+                <img src={logo} alt="Letov the punk"/>
+                <button
+                    className={this.state.activeTab==="songs" ? "active-tab":""}
+                    onClick={() => {this.setState({activeTab: "songs"}); this.props.onSongTab()}}
+                >Songs</button>
+                <button
+                    className={this.state.activeTab==="queue" ? "active-tab":""}
+                    onClick={() => {this.setState({activeTab: "queue"}); this.props.onQueueTab()}}
+                >Queue</button>
+            </header>
+        )
+    }
 }
 
 export default Header
