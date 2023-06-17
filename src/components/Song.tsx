@@ -61,7 +61,7 @@ class Song extends React.Component<songProps, songState> {
     }
 
     render() {
-        return <div className={"song" + (this.state.expanded ? " song-expanded" : "")}>
+        return <div className="song">
             <label className="song-number">{this.props.id}</label>
             <div className="song-name">
                 <input

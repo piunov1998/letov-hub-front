@@ -17,10 +17,6 @@
     transition-duration: 0.3s;
 }
 
-.song-expanded {
-    height: 5em;
-}
-
 .song-status {
     flex: 1;
     font-size: 12px;
