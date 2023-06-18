@@ -8,10 +8,13 @@ export type songProps = {
     source: string;
 }
 
+type renameStatus = "changed" | "saved" | "forbidden"
+
 type songState = {
     name: string
     renamed: boolean
     expanded: boolean
+    renameStatus: renameStatus
 }
 
 class Song extends React.Component<songProps, songState> {
@@ -24,6 +27,7 @@ class Song extends React.Component<songProps, songState> {
             name: props.name,
             renamed: false,
             expanded: false,
+            renameStatus: "saved"
         }
         this.initName = props.name
 
@@ -32,8 +36,23 @@ class Song extends React.Component<songProps, songState> {
     }
 
     onKeyPressed(event: React.KeyboardEvent<HTMLInputElement>) {
-        if (event.key !== "Enter") return
-        this.Rename(this.state.name)
+        switch (event.key) {
+            case "Enter":
+                this.Rename(this.state.name)
+                return
+            case "Escape":
+                event.currentTarget.value = this.initName
+                event.currentTarget.blur()
+                this.setState({
+                    name: this.initName,
+                    expanded: false,
+                    renameStatus: "saved",
+                    renamed: false
+                })
+                return
+            default:
+                return
+        }
     }
 
     onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -42,23 +61,39 @@ class Song extends React.Component<songProps, songState> {
         if (event.currentTarget.value === this.initName) {
             this.setState({renamed: false, expanded: false})
         } else {
-            this.setState({renamed: true, expanded: true})
+            this.setState({renamed: true, expanded: true, renameStatus: "changed"})
         }
     }
 
     Rename(newName: string) {
+        if (this.initName === newName) return
+
         const url = `${process.env.REACT_APP_HOST}/api/songs/${this.props.id}/rename`
-        axios.post(url, {"name": newName}, {withCredentials: true}).then((response) => {
-            if (response.status !== 204) {
-                alert("Error during rename")
-                return
-            }
-            this.setState({renamed: false})
-            this.initName = newName
-            setTimeout(() => {
-                this.setState({expanded: false})
-            }, 1000)
-        })
+        axios.post(url, {"name": newName}, {withCredentials: true})
+            .then(response => {
+                this.setState({renamed: false, renameStatus: "saved"})
+                this.initName = newName
+                setTimeout(() => {
+                    this.setState({expanded: false})
+                }, 1000)
+            })
+            .catch(error => {
+                switch (error.response.status) {
+                    case 403:
+                        this.setState({renameStatus: "forbidden"})
+                }
+            })
+    }
+
+    getStatusDescription(state: renameStatus): string {
+        switch (state) {
+            case "changed":
+                return "press Enter to save changes"
+            case "saved":
+                return "Saved!"
+            case "forbidden":
+                return "you are not allowed to rename songs"
+        }
     }
 
     render() {
@@ -68,12 +103,12 @@ class Song extends React.Component<songProps, songState> {
                 <input
                     defaultValue={this.state.name}
                     onChange={this.onChange}
-                    onKeyPress={this.onKeyPressed}
+                    onKeyDown={this.onKeyPressed}
                 />
                 <label
                     className={"song-status" + (this.state.renamed ? " song-status-not-saved" : " song-status-saved")}
                     hidden={!this.state.expanded}
-                >{this.state.renamed ? "press Enter to save changes" : "Saved!"}</label>
+                >{this.getStatusDescription(this.state.renameStatus)}</label>
             </div>
             <a className="song-source" href={this.props.source}>YT link</a>
         </div>
