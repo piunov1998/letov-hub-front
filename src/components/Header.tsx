@@ -26,14 +26,21 @@ class Header extends React.Component<headerProps, headerState> {
         return (
             <header className="header">
                 <img src={logo} alt="Letov the punk"/>
-                <button
-                    className={this.state.activeTab==="songs" ? "active-tab":""}
-                    onClick={() => {this.setState({activeTab: "songs"}); this.props.onSongTab()}}
-                >Songs</button>
-                <button
-                    className={this.state.activeTab==="queue" ? "active-tab":""}
-                    onClick={() => {this.setState({activeTab: "queue"}); this.props.onQueueTab()}}
-                >Queue</button>
+                <div className="panel">
+                    <button
+                        className={this.state.activeTab==="songs" ? "active-tab":""}
+                        onClick={() => {this.setState({activeTab: "songs"}); this.props.onSongTab()}}
+                    >Songs</button>
+                    <button
+                        className={this.state.activeTab==="queue" ? "active-tab":""}
+                        onClick={() => {this.setState({activeTab: "queue"}); this.props.onQueueTab()}}
+                    >Queue</button>
+                    <button>Button1</button>
+                    <button>Button2</button>
+                    <button>Button3</button>
+                    <button>Button4</button>
+                    <button>Button5</button>
+                </div>
             </header>
         )
     }
