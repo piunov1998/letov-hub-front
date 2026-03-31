@@ -1,0 +1,23 @@
+.icon-button {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    border: rgba(0,0,0,0) 1px solid;
+    border-radius: 100%;
+}
+
+.icon-button:hover {
+    box-shadow: black 0 0 15px -7px;
+}
+
+.icon-button:active {
+    background-color: rgba(0,0,0,0.11);
+    box-shadow: black 0 0 15px -7px;
+}
+
+.icon-button-image {
+    height: 100%;
+    width: 100%;
+}

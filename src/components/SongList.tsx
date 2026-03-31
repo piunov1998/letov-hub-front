@@ -25,10 +25,25 @@ class SongList extends React.Component<any, songListState> {
         return songs
     }
 
+    deleteSong(id: number): () => void {
+        return () => {
+            let songs: songProps[] = []
+
+            for (let song of this.state.songs) {
+                if (song.id !== id) {
+                    songs.push(song)
+                }
+            }
+
+            this.setState({songs: songs})
+        }
+    }
+
     render() {
         return (
             <div className="song-list">{this.state.songs.map((song: songProps) => (
-                <Song id={song.id} name={song.name} source={song.source} key={song.id}/>
+                <Song id={song.id} name={song.name} source={song.source} key={song.id}
+                      selfDestructCallback={this.deleteSong(song.id)}/>
             ))}</div>
         )
     }

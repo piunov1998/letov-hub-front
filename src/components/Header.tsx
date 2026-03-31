@@ -35,11 +35,6 @@ class Header extends React.Component<headerProps, headerState> {
                         className={this.state.activeTab==="queue" ? "active-tab":""}
                         onClick={() => {this.setState({activeTab: "queue"}); this.props.onQueueTab()}}
                     >Queue</button>
-                    <button>Button1</button>
-                    <button>Button2</button>
-                    <button>Button3</button>
-                    <button>Button4</button>
-                    <button>Button5</button>
                 </div>
             </header>
         )

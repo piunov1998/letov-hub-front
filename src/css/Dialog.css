@@ -1,0 +1,50 @@
+.dialog-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 15px;
+
+    background-color: white;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    box-shadow: black 0 0 20px -5px;
+
+}
+
+.dialog-box-text {
+    text-align: center;
+    font-weight: lighter;
+    max-width: 600px;
+}
+
+.dialog-box-buttons {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+    justify-content: center;
+}
+
+.dialog-box-buttons button {
+    font-size: 16px;
+    box-sizing: border-box;
+    padding: 5px;
+    background-color: #2d2d2d;
+    border: rgba(0,0,0,0) 1px solid;
+    border-radius: 10px;
+    width: 80px;
+    font-family: monospace;
+    font-weight: normal;
+    color: white;
+}
+
+.dialog-box-buttons button:hover {
+    background-color: #4f4f4f;
+}
+
+.dialog-box-buttons button:active {
+    background-color: #626262;
+}

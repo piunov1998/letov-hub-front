@@ -1,11 +1,20 @@
 import "../css/Song.css"
 import React from "react";
 import axios from "axios";
+import IconButton from "./IconButton";
+// @ts-ignore
+import youtubeIcon from "../img/icons/youtube.png"
+// @ts-ignore
+import deleteIcon from "../img/icons/delete.png"
+// @ts-ignore
+import queueIcon from "../img/icons/add-to-playlist.png"
+import DialogBox from "./Dialog";
 
 export type songProps = {
-    id: number;
-    name: string;
-    source: string;
+    id: number
+    name: string
+    source: string
+    selfDestructCallback(): void
 }
 
 type renameStatus = "changed" | "saved" | "forbidden"
@@ -15,7 +24,10 @@ type songState = {
     renamed: boolean
     expanded: boolean
     renameStatus: renameStatus
+    deleteConfirmationOpened: boolean
 }
+
+const iconsSize = 16
 
 class Song extends React.Component<songProps, songState> {
 
@@ -27,12 +39,17 @@ class Song extends React.Component<songProps, songState> {
             name: props.name,
             renamed: false,
             expanded: false,
-            renameStatus: "saved"
+            renameStatus: "saved",
+            deleteConfirmationOpened: false
         }
         this.initName = props.name
 
         this.onChange = this.onChange.bind(this)
         this.onKeyPressed = this.onKeyPressed.bind(this)
+        this.Delete = this.Delete.bind(this)
+        this.Queue = this.Queue.bind(this)
+        this.showDeletingConfirmation = this.showDeletingConfirmation.bind(this)
+        this.hideDeletingConfirmation = this.hideDeletingConfirmation.bind(this)
     }
 
     onKeyPressed(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -85,6 +102,48 @@ class Song extends React.Component<songProps, songState> {
             })
     }
 
+    Delete(): void {
+        const url = `${process.env.REACT_APP_HOST}/api/songs/${this.props.id}`
+        axios.delete(url, {withCredentials: true})
+            .then(()=>{
+                this.props.selfDestructCallback()
+            })
+            .catch(err => {
+                switch (err.response?.status) {
+                    case 403:
+                        alert("Forbidden")
+                        return
+                    case 404:
+                        this.props.selfDestructCallback()
+                        return
+                }
+            })
+        this.hideDeletingConfirmation()
+    }
+
+    Queue(): void {
+        const url = `${process.env.REACT_APP_HOST}/api/songs/${this.props.id}/queue`
+        axios.post(url, null, {withCredentials: true})
+            .catch(err => {
+                switch (err.response?.status) {
+                    case 403:
+                        alert("Forbidden")
+                        return
+                    case 404:
+                        alert("Song not found")
+                        return
+                }
+            })
+    }
+
+    showDeletingConfirmation(): void {
+        this.setState({deleteConfirmationOpened: true})
+    }
+
+    hideDeletingConfirmation(): void {
+        this.setState({deleteConfirmationOpened: false})
+    }
+
     getStatusDescription(state: renameStatus): string {
         switch (state) {
             case "changed":
@@ -110,7 +169,20 @@ class Song extends React.Component<songProps, songState> {
                     hidden={!this.state.expanded}
                 >{this.getStatusDescription(this.state.renameStatus)}</label>
             </div>
-            <a className="song-source" href={this.props.source}>YT link</a>
+            <div className="song-button-panel">
+                <IconButton icon={queueIcon} onClick={this.Queue} tooltip="Add to queue" size={iconsSize}/>
+                <IconButton icon={youtubeIcon} onClick={() => {
+                    window.open(this.props.source, "_blank")?.focus()
+                }} tooltip={"Open in YouTube"} size={iconsSize}/>
+                <IconButton icon={deleteIcon} onClick={this.showDeletingConfirmation} tooltip="Delete" size={iconsSize}/>
+            </div>
+            {this.state.deleteConfirmationOpened ? <DialogBox
+                text="Confirm deleting"
+                boldPart={this.props.name}
+                okCallback={this.Delete}
+                cancelCallback={this.hideDeletingConfirmation}
+            /> : null
+            }
         </div>
     }
 }
